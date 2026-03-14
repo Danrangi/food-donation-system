@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+instance/
+.env
+food_donation.db
+.venv/
+*.egg-info/
+dist/
+build/

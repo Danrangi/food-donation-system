@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}My Tasks — FoodBridge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>My Delivery Tasks</h2>
+</div>
+
+<!-- Active Tasks -->
+<h3 style="color:var(--green-dark); margin-bottom:1rem; font-size:1.1rem;">
+  🚚 Active Assignments
+</h3>
+
+{% if assigned_tasks %}
+  {% for task in assigned_tasks %}
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
+      <div>
+        <h3 style="color:var(--green-dark); margin-bottom:0.4rem;">{{ task.food_name }}</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+          Quantity: <strong>{{ task.quantity }}</strong><br/>
+          Pickup: <strong>{{ task.location }}</strong><br/>
+          Deliver to: <strong>{{ task.recipient_org.name }}</strong><br/>
+          Address: <strong>{{ task.recipient_org.address }}</strong><br/>
+          Contact: <strong>{{ task.recipient_org.contact or 'N/A' }}</strong><br/>
+          Assigned on: <strong>{{ task.created_at.strftime('%d %b %Y, %I:%M %p') }}</strong>
+        </p>
+      </div>
+      <span class="badge badge-assigned">assigned</span>
+    </div>
+
+    <form method="POST" action="{{ url_for('delivery.complete', donation_id=task.id) }}"
+          style="margin-top:1rem;">
+      <button type="submit" class="btn btn-primary">
+        ✅ Mark as Completed
+      </button>
+    </form>
+  </div>
+  {% endfor %}
+
+{% else %}
+<div class="empty-state" style="padding:1.5rem;">
+  <div class="empty-icon">📭</div>
+  <p>No active assignments right now. Check back later.</p>
+</div>
+{% endif %}
+
+<!-- Completed Tasks -->
+<h3 style="color:var(--green-dark); margin:1.5rem 0 1rem; font-size:1.1rem;">
+  ✅ Completed Deliveries
+</h3>
+
+{% if completed_tasks %}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Food Item</th>
+          <th>Quantity</th>
+          <th>Delivered To</th>
+          <th>Status</th>
+          <th>Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in completed_tasks %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ task.food_name }}</td>
+          <td>{{ task.quantity }}</td>
+          <td>{{ task.recipient_org.name if task.recipient_org else '—' }}</td>
+          <td><span class="badge badge-completed">completed</span></td>
+          <td>{{ task.updated_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% else %}
+<div class="empty-state" style="padding:1.5rem;">
+  <div class="empty-icon">🏁</div>
+  <p>No completed deliveries yet.</p>
+</div>
+{% endif %}
+
+{% endblock %}

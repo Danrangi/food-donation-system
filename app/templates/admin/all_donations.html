@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}All Donations — FoodBridge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>All Donations</h2>
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">← Dashboard</a>
+</div>
+
+{% if donations %}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Food Item</th>
+          <th>Quantity</th>
+          <th>Pickup Location</th>
+          <th>Donor</th>
+          <th>Delivery Person</th>
+          <th>Recipient Org</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in donations %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ d.food_name }}</td>
+          <td>{{ d.quantity }}</td>
+          <td>{{ d.location }}</td>
+          <td>{{ d.donor.username }}</td>
+          <td>{{ d.delivery_person.username if d.delivery_person else '—' }}</td>
+          <td>{{ d.recipient_org.name if d.recipient_org else '—' }}</td>
+          <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+          <td>{{ d.created_at.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">📭</div>
+  <p>No donations have been submitted yet.</p>
+</div>
+{% endif %}
+{% endblock %}

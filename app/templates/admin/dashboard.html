@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — FoodBridge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Admin Dashboard</h2>
+  <a href="{{ url_for('admin.pool') }}" class="btn btn-primary">View Donation Pool</a>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-number" style="color: var(--warning);">{{ pending_count }}</div>
+    <div class="stat-label">Pending Donations</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" style="color: var(--info);">{{ assigned_count }}</div>
+    <div class="stat-label">Assigned Deliveries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" style="color: var(--green-main);">{{ completed_count }}</div>
+    <div class="stat-label">Completed Deliveries</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ pending_count + assigned_count + completed_count }}</div>
+    <div class="stat-label">Total Donations</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Quick Actions</div>
+  <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+    <a href="{{ url_for('admin.pool') }}" class="btn btn-primary">
+      🗂 Manage Pending Pool
+    </a>
+    <a href="{{ url_for('admin.all_donations') }}" class="btn btn-outline">
+      📋 View All Donations
+    </a>
+  </div>
+</div>
+{% endblock %}

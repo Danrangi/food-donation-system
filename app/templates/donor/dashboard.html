@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Donor Dashboard — FoodBridge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>My Donations</h2>
+  <a href="{{ url_for('donor.new_donation') }}" class="btn btn-primary">+ New Donation</a>
+</div>
+
+{% if donations %}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Food Item</th>
+          <th>Quantity</th>
+          <th>Pickup Location</th>
+          <th>Status</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in donations %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ d.food_name }}</td>
+          <td>{{ d.quantity }}</td>
+          <td>{{ d.location }}</td>
+          <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+          <td>{{ d.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">🍽️</div>
+  <p>You have not submitted any donations yet.</p>
+  <a href="{{ url_for('donor.new_donation') }}" class="btn btn-primary" style="margin-top:1rem;">
+    Submit Your First Donation
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}
