@@ -1,12 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
-import os
-from PyInstaller.utils.hooks import collect_data_files
 
 block_cipher = None
 
 added_files = [
     ('app/templates',  'app/templates'),
     ('app/static',     'app/static'),
+    ('seed.py',        '.'),
 ]
 
 a = Analysis(
@@ -19,13 +18,27 @@ a = Analysis(
         'flask_login',
         'flask_sqlalchemy',
         'flask_wtf',
+        'flask_bcrypt',
         'werkzeug',
+        'werkzeug.security',
+        'werkzeug.routing',
         'sqlalchemy',
         'sqlalchemy.dialects.sqlite',
+        'sqlalchemy.orm',
         'jinja2',
         'click',
         'itsdangerous',
         'email_validator',
+        'app',
+        'app.models',
+        'app.auth',
+        'app.auth.routes',
+        'app.donor',
+        'app.donor.routes',
+        'app.admin',
+        'app.admin.routes',
+        'app.delivery',
+        'app.delivery.routes',
     ],
     hookspath=[],
     runtime_hooks=[],
@@ -52,6 +65,6 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     icon=None,
 )
