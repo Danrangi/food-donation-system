@@ -3,21 +3,18 @@ import os
 import threading
 import webbrowser
 import time
+import signal
 
-# ── Fix paths when running as a PyInstaller bundle ──────────────────────────
 if getattr(sys, 'frozen', False):
     base_dir = sys._MEIPASS
-    # Put the database next to the .exe, not inside the bundle
     db_dir = os.path.dirname(sys.executable)
 else:
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_dir = base_dir
 
-# Set environment variable so create_app() can find the right DB path
 os.environ['FOODBRIDGE_DB_DIR'] = db_dir
 os.environ['FOODBRIDGE_BASE_DIR'] = base_dir
 
-# ── Run seed.py on first launch (only if DB doesn't exist yet) ───────────────
 db_path = os.path.join(db_dir, 'food_donation.db')
 if not os.path.exists(db_path):
     import importlib.util
@@ -26,14 +23,12 @@ if not os.path.exists(db_path):
     seed_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(seed_module)
 
-# ── Open browser after short delay ──────────────────────────────────────────
 def open_browser():
     time.sleep(2)
     webbrowser.open('http://localhost:5000/auth/login')
 
 threading.Thread(target=open_browser, daemon=True).start()
 
-# ── Start Flask ──────────────────────────────────────────────────────────────
 from app import create_app
 from flask import redirect, url_for
 
